@@ -66,6 +66,9 @@ public:
     points.unique();
 		std::cout << "done" << std::endl;
 
+    int test_num = width * height - (int)points.size();
+    std::cout << test_num << " points to calculate..."<< std::endl ;
+
 		// TODO: incremental addition
 		// tip: evaluate error in RGB or grey level space
 
@@ -81,6 +84,8 @@ public:
     
     // Create an error image
     CImg<unsigned char> diff(width, height, 1, 3, 0); 
+
+    float error[3] = {0.0};
 
 		for (int x = 0; x < width; x++)
 		{
@@ -127,6 +132,7 @@ public:
              g += w * (double)input(xp, yp, 1);
              b += w * (double)input(xp, yp, 2);
            }
+
         }
 				// write pixel color
 				output.atXY(x, y, 0) = (unsigned char)r;
@@ -134,6 +140,11 @@ public:
 				output.atXY(x, y, 2) = (unsigned char)b;
 
         // write error image
+
+        error[0] += abs(r - input(x, y, 0));
+        error[1] += abs(g - input(x, y, 1));
+        error[2] += abs(b - input(x, y, 2));
+
         diff.atXY(x, y, 0) = (unsigned char)abs(r - input(x, y, 0));
         diff.atXY(x, y, 1) = (unsigned char)abs(g - input(x, y, 1));
         diff.atXY(x, y, 2) = (unsigned char)abs(b - input(x, y, 2));
@@ -144,7 +155,12 @@ public:
 		std::cout << "write image...";
 		output.save_bmp(pOutput);
     diff.save_bmp("diff.bmp");
-		std::cout << "done" << std::endl;
+		std::cout << "done" << std::endl << std::endl;
+
+    std::cout << "The average error in R channel: " << error[0] / test_num << std::endl;
+    std::cout << "The average error in G channel: " << error[1] / test_num << std::endl;
+    std::cout << "The average error in B channel: " << error[2] / test_num << std::endl;
+
 
 		return true;
 	}
