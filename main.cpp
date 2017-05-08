@@ -46,9 +46,13 @@ int main(int argc, char** argv)
   std::cout << "MODE: " << mode << std::endl;
 
   Sibson sibson;
-  if(mode == 1 || mode == 4){
+  if(mode == 1){
     std::cout << "Number of points: " << nb_points << std::endl;
     sibson.run(nb_points, mode, argv[4], argv[5]);
+  }
+  else if(mode == 4){
+    std::cout << "Number of points: " << nb_points << std::endl;
+    sibson.run(nb_points, argv[4], argv[5]);
   }
   else{
 	  std::cout << "maximum error: " << max_error << std::endl;
