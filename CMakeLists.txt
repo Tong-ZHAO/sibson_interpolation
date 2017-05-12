@@ -29,6 +29,10 @@ set(SRCS main.cpp)
 
 #add_file_dependencies( main.cpp cimg.h sibson.h console.h)
 
+find_package( PythonInterp REQUIRED )
+find_package( PythonLibs REQUIRED )
+include_directories ( ${PYTHON_INCLUDE_DIRS} )
+
 find_package (Threads)
 find_package(X11 REQUIRED)
 include_directories(${X11_INCLUDE_DIR})
@@ -38,4 +42,4 @@ include_directories(${X11_INCLUDE_DIR})
 	#set_target_properties(sibson PROPERTIES COMPILE_FLAGS "/wd4996")
 
 
-    target_link_libraries( sibson  ${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} )
+    target_link_libraries( sibson  ${CMAKE_THREAD_LIBS_INIT} ${X11_LIBRARIES} ${PYTHON_LIBRARIES})
