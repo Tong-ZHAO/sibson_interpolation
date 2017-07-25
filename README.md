@@ -1,4 +1,4 @@
-# sibson_interpolation
+# Sibson Interpolation
 
 Common techniques of interpolation sometimes lead to regularation problems. Sibson interpolation helps us avoid this danger by using a refined interpolation.
 
