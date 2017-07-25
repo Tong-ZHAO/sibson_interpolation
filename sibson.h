@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cmath>
 #include <iterator>
+#include <Python.h>
+#include <string>
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Delaunay_triangulation_2.h>
@@ -337,6 +339,10 @@ public:
 			return false;
 		}
 		std::cout << "done" << std::endl;
+    std::ofstream myfile;
+
+    // change it !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    myfile.open("/home/zt/Maillage/sibson_interpolation/errors.txt");
 
 		// generate initial points to interpolate
 		// at the four image corners
@@ -462,6 +468,8 @@ public:
       std::cout << "The average error in G channel: " << error[1] << std::endl;
       std::cout << "The average error in B channel: " << error[2] << std::endl;
 
+      myfile << error[0] << " " << error[1] << " " << error[2] << " ";
+
       if(flag == true) break;
 
       // early stop
@@ -483,7 +491,7 @@ public:
         points.push_front(Point(0.0, height - 1.0));
         points.push_front(Point(width - 1.0, height - 1.0));
       }
-      else if(counter <= 10){
+      else if(counter < 10){
         counter++;
         std::sort(pt_error.begin(), pt_error.end(), pair_cmp);
         p_error = error[0] + error[1] + error[2];
@@ -504,10 +512,18 @@ public:
       }
     }
 
+    myfile.close();
 		std::cout << "write image...";
 		output.save_bmp(pOutput);
     diff.save_bmp("diff.bmp");
 		std::cout << "done" << std::endl << std::endl;
+
+    std::cout << "use python to draw figure..." << std::endl;
+    FILE * fp = NULL;
+    fp = fopen("/home/zt/Maillage/sibson_interpolation/draw_figure.py", "r");
+    Py_Initialize();
+    PyRun_SimpleFile(fp, "/home/zt/Maillage/sibson_interpolation/draw_figure.py");
+    Py_Finalize();
 
 		return true;
 	}
